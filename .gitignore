@@ -7,6 +7,16 @@ node_modules/
 frontend/dist/
 backend/dist/
 
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
 # Environment files
 .env
 .env.local
@@ -22,18 +32,12 @@ backend/dist/
 .DS_Store
 Thumbs.db
 
-# Logs
+# Service runtime
+nohup.out
 *.log
-npm-debug.log*
 
-# Uploads (user data)
-backend/uploads/*
-!backend/uploads/.gitkeep
-
-# Coverage
-coverage/
-
-# Turso/tmp
-*.db
-*.db-journal
-*.sqlite
+# Test artifacts
+.pytest_cache/
+*.egg-info/
+dist/
+build/
