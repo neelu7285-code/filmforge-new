@@ -1,1 +1,39 @@
-node_modules/\nfrontend/dist/\n.DS_Store
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+frontend/dist/
+backend/dist/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Uploads (user data)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Coverage
+coverage/
+
+# Turso/tmp
+*.db
+*.db-journal
+*.sqlite
