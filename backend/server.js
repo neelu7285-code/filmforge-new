@@ -4,6 +4,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import authRoutes from './routes/auth.js';
+import projectRoutes from './routes/projects.js';
+import { authenticate } from './middleware/auth.js';
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,22 +27,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ---------------------------------------------------------------------------
-// API Routes (placeholders — will be implemented as features are built)
+// API Routes
 // ---------------------------------------------------------------------------
 
-// Health check
+// Health check (no auth)
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'filmforge-api', version: '0.1.0' });
 });
 
-// Auth placeholder
-app.post('/api/auth/register', (_req, res) => {
-  res.json({ message: 'Registration endpoint — coming soon' });
-});
+// Auth routes (no auth needed)
+app.use('/api/auth', authRoutes);
 
-app.post('/api/auth/login', (_req, res) => {
-  res.json({ message: 'Login endpoint — coming soon' });
-});
+// Protected routes (auth required)
+app.use('/api/projects', authenticate, projectRoutes);
 
 // Scripts placeholder
 app.post('/api/scripts/upload', (_req, res) => {
@@ -47,15 +48,6 @@ app.post('/api/scripts/upload', (_req, res) => {
 
 app.get('/api/scripts/:id', (_req, res) => {
   res.json({ message: 'Script detail endpoint — coming soon' });
-});
-
-// Projects placeholder
-app.get('/api/projects', (_req, res) => {
-  res.json({ message: 'Projects list endpoint — coming soon', projects: [] });
-});
-
-app.post('/api/projects', (_req, res) => {
-  res.json({ message: 'Project creation endpoint — coming soon' });
 });
 
 // Breakdowns placeholder
