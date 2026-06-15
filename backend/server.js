@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.js';
 import projectRoutes from './routes/projects.js';
+import scriptRoutes from './routes/scripts.js';
 import { authenticate } from './middleware/auth.js';
 
 dotenv.config();
@@ -41,19 +42,8 @@ app.use('/api/auth', authRoutes);
 // Protected routes (auth required)
 app.use('/api/projects', authenticate, projectRoutes);
 
-// Scripts placeholder
-app.post('/api/scripts/upload', (_req, res) => {
-  res.json({ message: 'Script upload endpoint — coming soon' });
-});
-
-app.get('/api/scripts/:id', (_req, res) => {
-  res.json({ message: 'Script detail endpoint — coming soon' });
-});
-
-// Breakdowns placeholder
-app.get('/api/projects/:id/breakdowns', (_req, res) => {
-  res.json({ message: 'Breakdowns endpoint — coming soon' });
-});
+// Script routes (auth required)
+app.use('/api/scripts', authenticate, scriptRoutes);
 
 // ---------------------------------------------------------------------------
 // Serve built frontend in production
