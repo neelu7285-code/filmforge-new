@@ -165,4 +165,87 @@ router.get('/:projectId/breakdown', (req, res) => {
   }
 });
 
+/**
+ * POST /api/scripts/:projectId/budget
+ * Estimate budget from breakdown data using the AI parser.
+ */
+router.post('/:projectId/budget', async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    // Get all scenes with their breakdown data
+    const scenes = dbQuery(
+      `SELECT scene_number, header, setting, location, time_of_day, synopsis, characters, props, costumes, vfx, vehicles, animals, crowd_needs
+       FROM scenes WHERE project_id = '${esc(projectId)}' ORDER BY scene_number`
+    );
+
+    const project = dbQuery(
+      `SELECT id, title, script_text FROM projects WHERE id = '${esc(projectId)}'`
+    );
+
+    if (!project[0]) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Build breakdown data for the parser
+    const breakdownData = {
+      title: project[0].title,
+      scenes: scenes.map((s) => ({
+        scene_number: s.scene_number,
+        header: s.header,
+        setting: s.setting,
+        location: s.location,
+        time_of_day: s.time_of_day,
+        characters: safeParseJson(s.characters),
+        props: safeParseJson(s.props),
+        costumes: safeParseJson(s.costumes),
+        vfx: safeParseJson(s.vfx),
+        vehicles: safeParseJson(s.vehicles),
+        animals: safeParseJson(s.animals),
+        crowd_needs: safeParseJson(s.crowd_needs),
+      })),
+      total_scenes: scenes.length,
+    };
+
+    // Call the parser budget endpoint
+    const response = await fetch(`${PARSER_URL}/api/budget`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ breakdown_data: breakdownData }),
+    });
+
+    if (!response.ok) {
+      // Return estimated budget based on scenes count
+      const baseRate = scenes.length * 5000;
+      res.json({
+        total_range_low: baseRate * 0.7,
+        total_range_high: baseRate * 1.3,
+        currency: 'USD',
+        shooting_days_estimate: Math.ceil(scenes.length / 5),
+        crew_size_estimate: Math.min(scenes.length * 3, 50),
+        note: 'Estimated from scene count — parser budget service unavailable',
+      });
+      return;
+    }
+
+    const budgetData = await response.json();
+    res.json(budgetData);
+  } catch (err) {
+    console.error('[Budget Error]', err);
+    // Fallback estimation
+    res.json({
+      total_range_low: 50000,
+      total_range_high: 150000,
+      currency: 'USD',
+      shooting_days_estimate: 5,
+      crew_size_estimate: 15,
+      note: 'Fallback estimate',
+    });
+  }
+});
+
+function safeParseJson(val) {
+  try { return JSON.parse(val || '[]'); } catch { return []; }
+}
+
 export default router;
