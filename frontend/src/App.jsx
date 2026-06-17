@@ -5,6 +5,8 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import ScriptUpload from './pages/ScriptUpload';
+import ProjectDetail from './pages/ProjectDetail';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -23,7 +25,22 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          {/* Future: /projects/:id, /upload, etc. */}
+          <Route
+            path="/projects/:projectId/upload"
+            element={
+              <ProtectedRoute>
+                <ScriptUpload />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/:projectId/breakdown"
+            element={
+              <ProtectedRoute>
+                <ProjectDetail />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

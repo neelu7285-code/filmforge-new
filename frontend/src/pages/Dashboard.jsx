@@ -43,10 +43,11 @@ export default function Dashboard() {
         body: JSON.stringify({ title: newTitle, description: newDesc }),
       });
       if (res.ok) {
+        const data = await res.json();
         setNewTitle('');
         setNewDesc('');
         setShowCreate(false);
-        fetchProjects();
+        navigate(`/projects/${data.project.id}/upload`);
       }
     } catch {
       // ignore
@@ -144,9 +145,12 @@ export default function Dashboard() {
                 <div className="flex items-center gap-4">
                   <div className={`w-2.5 h-2.5 rounded-full ${statusColor(project.status)}`} title={project.status} />
                   <div>
-                    <Link to={`/projects/${project.id}`} className="text-white font-medium hover:text-primary-400 transition-colors">
-                      {project.title}
-                    </Link>
+                    <Link
+                    to={project.status === 'completed' ? `/projects/${project.id}/breakdown` : `/projects/${project.id}/upload`}
+                    className="text-white font-medium hover:text-primary-400 transition-colors"
+                  >
+                    {project.title}
+                  </Link>
                     {project.description && (
                       <p className="text-surface-400 text-sm mt-0.5">{project.description}</p>
                     )}
