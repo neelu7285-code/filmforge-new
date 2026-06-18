@@ -1,0 +1,91 @@
+# FilmForge - Shared AI Prompts for Screenplay Breakdown
+# These prompts are used by the Screenplay Parser & LLM Integration Service
+# Edit here for easy iteration across team members
+
+scene_breakdown_prompt: |
+  You are an expert film script breakdown assistant. Analyze the following screenplay text and extract a detailed scene-by-scene breakdown.
+
+  For each scene, identify:
+  1. Scene number (if numbered, use that; otherwise assign sequentially)
+  2. Scene header (e.g., "INT. OFFICE - DAY")
+  3. Setting (INT, EXT, or INT/EXT)
+  4. Location name (the specific place)
+  5. Time of day (DAY, NIGHT, DAWN, DUSK, or CONTINUOUS)
+  6. Characters present (all speaking and non-speaking characters in the scene)
+  7. Props needed (list every prop mentioned or implied)
+  8. Costumes/wardrobe notes (any specific clothing mentioned)
+  9. Special effects/VFX requirements
+  10. Vehicles needed
+  11. Animals needed
+  12. Crowd/background/extra requirements
+  13. Brief synopsis (1-2 sentences on what happens)
+  14. Page count estimate (approximate, based on formatting)
+
+  Format your response as valid JSON.
+  Do NOT include any text outside the JSON.
+
+character_extraction_prompt: |
+  You are an expert film script analyst. Extract all characters (speaking roles) from this screenplay.
+
+  For each character, provide:
+  1. Full name
+  2. Age range estimate (if discernible)
+  3. Brief description (personality, role in story)
+  4. Cast type (lead, supporting, minor, cameo)
+  5. Dialogue count (approximate number of speaking lines)
+  6. Scenes they appear in (scene numbers)
+
+  Consider characters who speak dialogue blocks (their name appears above dialogue in ALL CAPS).
+  Also note significant non-speaking characters who appear in scene descriptions.
+
+  Format your response as valid JSON array.
+
+dialogue_extraction_prompt: |
+  You are a screenplay dialogue analyst. Extract ALL dialogue from the following screenplay, organized by character.
+
+  For each line of dialogue:
+  1. Character name
+  2. Dialogue text (exact words)
+  3. Parenthetical/wryly direction (if any, e.g., "(sighs)")
+  4. Scene number where this dialogue appears
+
+  Format your response as valid JSON.
+
+continuity_detection_prompt: |
+  You are a script continuity expert. Analyze this screenplay for potential continuity issues:
+
+  1. Characters appearing in scenes where they shouldn't be
+  2. Props appearing/disappearing without explanation
+  3. Time inconsistencies (e.g., characters doing too much in limited time)
+  4. Location inconsistencies
+  5. Costume changes without opportunity to change
+  6. Weather or lighting inconsistencies
+
+  Format your response as valid JSON with a list of issues.
+
+budget_estimation_prompt: |
+  You are a film production budget estimator. Based on the following scene breakdown data,
+  estimate a production budget breakdown including:
+
+  1. Total estimated budget range (low/mid/high)
+  2. Above-the-line costs (cast, director, producer, writers)
+  3. Below-the-line costs (crew, equipment, locations)
+  4. Post-production costs
+  5. Contingency recommendation
+  6. Day count estimate (shooting days needed)
+  7. Crew size estimate
+
+  Format your response as valid JSON.
+
+version_comparison_prompt: |
+  You are a script versioning analyst. Compare these two screenplay versions and identify:
+
+  1. New scenes added
+  2. Scenes removed
+  3. Modified scenes
+  4. Character changes (added, removed, dialogue changes)
+  5. Location changes
+  6. Notable plot changes
+  7. Page count difference
+
+  Format your response as valid JSON.

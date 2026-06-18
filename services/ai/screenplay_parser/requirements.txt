@@ -1,0 +1,15 @@
+# FilmForge - Screenplay Parser Service Dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+httpx==0.27.2
+pyyaml==6.0.2
+python-dotenv==1.0.1
+# OpenAI integration (optional, install based on provider)
+openai>=1.0.0
+# Anthropic integration (optional)
+anthropic>=0.39.0
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
